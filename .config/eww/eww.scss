@@ -1,0 +1,52 @@
+*{
+  all: unset;
+  font-family: JetBrainsMono Nerd Font;
+  margin: 0 ;
+  padding: 0 ;
+  color: #ECDFCC;
+}
+.bottom{
+  font-size: 10px ;
+  font-weight: bold; 
+  background-color:#0b0e14 ;
+  margin:0 ;
+  padding: 3px 20px
+}
+
+
+
+.green{
+  color: #00FF00 ;
+}
+
+.yellow{
+  color: #FFFF00 
+}
+
+.orange{
+  color: #FF7F00
+}
+
+.red{
+  color: #FF0000 ;
+}
+
+
+.salatContainer{
+  background-color:#0b0e14 ;
+  padding: 10px ;
+  border:solid 2px #FF5733
+}
+
+.dayContainer{
+  font-weight: bold ;
+  background-color:#0b0e14 ;
+}
+
+
+tooltip{
+  background: black;
+  font-size: 10px;
+}
+
+

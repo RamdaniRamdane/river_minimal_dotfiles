@@ -1,0 +1,3 @@
+#!/bin/bash
+salawat=$(curl  "http://api.aladhan.com/v1/timings/{date}?latitude=36.6373&longitude=4.2041" | jq -r '.data.timings')
+echo ${salawat}

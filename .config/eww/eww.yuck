@@ -1,0 +1,118 @@
+(defwidget bar []
+		   (centerbox :orientation "h"
+		              :class "bottom"
+					  :space-evenly true
+
+	            (box :class "bat"
+				     :orientation "h"
+					 :halign "start"
+				   (label :class {EWW_BATTERY.BAT0.status == "Charging" ? "green" : EWW_BATTERY.BAT0.capacity < 20 ? "red" : "bat"}   
+				          :text "󰝤" 
+						  :tooltip {EWW_BATTERY.BAT0.capacity}"%")
+				)			
+                (box :class "wrk"
+				     :orientation "h"
+					 :halign "center"
+				   (button :onclick "bash ~/.config/river/scripts/tag 1" {wrk == 1 ? " 󰝤 " : "  "})
+				   (button :onclick "bash ~/.config/river/scripts/tag 2" {wrk == 2 ? " 󰝤 " : "  "})
+				   (button :onclick "bash ~/.config/river/scripts/tag 3" {wrk == 3 ? " 󰝤 " : "  "})
+				   (button :onclick "bash ~/.config/river/scripts/tag 4" {wrk == 4 ? " 󰝤 " : "  "})
+				   (button :onclick "bash ~/.config/river/scripts/tag 5" {wrk == 5 ? " 󰝤 " : "  "})
+				)
+                (box :class "wifi"
+				     :orientation "h"
+					 :halign "end"
+				   (label :class {wifiRSSI > 80 ? "green" : wifiRSSI > 50 ? "orange" : wifiRSSI > 25 ? "yellow" : wifiRSSI > 0 ? "red" : "wifi" }
+				          :text "󰝤" 
+						  :tooltip wifiname)
+				)
+					  ))
+
+
+(deflisten wrk :initial 1 
+'tail -F ~/.config/river/tmp/tag')
+
+(defpoll wifiRSSI :interval "1s"
+`nmcli -f IN-USE,SIGNAL  device wifi | grep "*" | awk '{print $2}'`  )
+
+(defpoll wifiname :interval "1s"
+`nmcli -f IN-USE,SSID  device wifi | grep "*" | awk '{print $2}'`  )
+
+(defwindow bottom 
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "3px"
+                               :width "99%"
+                               :height "0px"
+                               :anchor "bottom center")
+           :stacking "fg"
+           :exclusive true
+  (bar)
+  )
+
+
+(defwindow top 
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "5px"
+                               :width "300px"
+                               :height "0px"
+                               :anchor "top center")
+           :stacking "fg"
+           :exclusive true
+       (box :class "dayContainer"
+	       :orientation "h"
+		   :space-evenly true
+		   (box :class "time" time)
+		   (box :class "date" date)
+		   )
+  )
+
+(defwindow salat 
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "-23px"
+                               :width "150px"
+                               :height "100"
+                               :anchor "top right")
+           :stacking "fg"
+           :wm-ignore false
+      (box :class "salatContainer"
+	       :orientation "v"
+		   :space-evenly false
+		 (box 
+		     (box :orientation "h"
+		       (box :halign "start" "Fajr")
+		       (box :halign "end" {jq(salawat , '.Fajr')})
+		     )
+			 )
+		     (box :orientation "h"
+		       (box :halign "start" "Dhuhr")
+		       (box :halign "end" {jq(salawat , '.Dhuhr')})
+		     )
+		     (box :orientation "h"
+		       (box :halign "start" "Asr")
+		       (box :halign "end" {jq(salawat , '.Asr')})
+		     )
+		     (box :orientation "h"
+		       (box :halign "start" "Maghrib")
+		       (box :halign "end" {jq(salawat , '.Maghrib')})
+		     )
+		     (box :orientation "h"
+		       (box :halign "start" "Isha")
+		       (box :halign "end" {jq(salawat , '.Isha')})
+		     )
+		 )
+
+  )
+
+(defpoll time :interval "1s" 
+  "date '+%H:%M'")
+
+(defpoll date :interval "1s" 
+  "date '+%d-%m-%Y'")
+
+
+(defpoll salawat :interval "1s" 
+  `curl  'http://api.aladhan.com/v1/timings/{date}?latitude=36.6373&longitude=4.2041' | jq -r '.data.timings'`)
+
