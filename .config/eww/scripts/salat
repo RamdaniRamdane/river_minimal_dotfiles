@@ -1,3 +1,44 @@
 #!/bin/bash
-salawat=$(curl  "http://api.aladhan.com/v1/timings/{date}?latitude=36.6373&longitude=4.2041" | jq -r '.data.timings')
-echo ${salawat}
+
+file_time=$(sed "1q;d" ~/.config/eww/scripts/salawat.txt)
+today_time=$(date +%Y-%m-%d)
+current_epoch=$(date +%s)
+
+file_epoch=$(date -d "$file_time" +%s)
+today_epoch=$(date -d "$today_time" +%s)
+if [ "$file_epoch" -lt "$today_epoch" ]; then
+    salawat=$(curl "http://api.aladhan.com/v1/timings/{date}?latitude=36.6373&longitude=4.2041" | jq -r '.data.timings')
+    fajr=$(echo ${salawat} | jq '.Fajr')
+    duhr=$(echo ${salawat} | jq '.Dhuhr')
+    asr=$(echo ${salawat} | jq '.Asr')
+    maghrib=$(echo ${salawat} | jq '.Maghrib')
+    isha=$(echo ${salawat} | jq '.Isha')
+    today=$(date +%Y-%m-%d)
+    echo -e "${today}\n${fajr}\n${duhr}\n${asr}\n${maghrib}\n${isha}" | tr -d '"' >~/.config/eww/scripts/salawat.txt
+fi
+
+fajr=$(sed "2q;d" ~/.config/eww/scripts/salawat.txt)
+duhr=$(sed "3q;d" ~/.config/eww/scripts/salawat.txt)
+asr=$(sed "4q;d" ~/.config/eww/scripts/salawat.txt)
+maghrib=$(sed "5q;d" ~/.config/eww/scripts/salawat.txt)
+isha=$(sed "6q;d" ~/.config/eww/scripts/salawat.txt)
+
+[ $1 == "fajr" ] && echo $fajr
+[ $1 == "duhr" ] && echo $duhr
+[ $1 == "maghrib" ] && echo $maghrib
+[ $1 == "asr" ] && echo $asr
+[ $1 == "isha" ] && echo $isha
+
+fajr_time=$(date -d "$today_time $fajr" +%s)
+duhr_time=$(date -d "$today_time $duhr" +%s)
+asr_time=$(date -d "$today_time $asr" +%s)
+maghrib_time=$(date -d "$today_time $maghrib" +%s)
+isha_time=$(date -d "$today_time $isha" +%s)
+
+if [ $1 == "next" ]; then
+    [ $fajr_time -gt $current_epoch ] && echo fajr && exit
+    [ $duhr_time -gt $current_epoch ] && echo duhr && exit
+    [ $asr_time -gt $current_epoch ] && echo asr && exit
+    [ $maghrib_time -gt $current_epoch ] && echo maghrib && exit
+    [ $isha_time -gt $((current_epoch)) ] && echo isha && exit
+fi

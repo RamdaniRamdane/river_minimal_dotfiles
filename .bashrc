@@ -41,6 +41,7 @@ alias vimtutor='nvim -c Tutor'
 alias pacman='sudo pacman'
 alias cat='bat'
 alias ping='ping 1.1.1.1'
+alias fsociety="sudo systemd-nspawn -D /opt/tools-container"
 alias config="/usr/bin/git --git-dir=$HOME/river_minimal_dotfiles --work-tree=$HOME"
 
 export LC_ALL=C.UTF-8
@@ -52,3 +53,7 @@ export NVM_DIR="$HOME/.nvm"
 . "$HOME/.cargo/env"
 
 export PATH="$HOME/utils/eww/target/release:$PATH"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"

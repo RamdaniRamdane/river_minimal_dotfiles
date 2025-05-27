@@ -1,6 +1,6 @@
 (defwidget bar []
 		   (centerbox :orientation "h"
-		              :class "bottom"
+		              :class "top"
 					  :space-evenly true
 
 	            (box :class "bat"
@@ -22,10 +22,17 @@
                 (box :class "wifi"
 				     :orientation "h"
 					 :halign "end"
+				    (box :class "time" time)
+				    (box :class "date" date)
 				   (label :class {wifiRSSI > 80 ? "green" : wifiRSSI > 50 ? "orange" : wifiRSSI > 25 ? "yellow" : wifiRSSI > 0 ? "red" : "wifi" }
 				          :text "󰝤" 
 						  :tooltip wifiname)
+				    
+
 				)
+				
+
+
 					  ))
 
 
@@ -41,10 +48,10 @@
 (defwindow bottom 
            :monitor 0
            :geometry (geometry :x "0%"
-                               :y "3px"
+                               :y "6px"
                                :width "99%"
                                :height "0px"
-                               :anchor "bottom center")
+                               :anchor "top center")
            :stacking "fg"
            :exclusive true
   (bar)
@@ -57,7 +64,7 @@
                                :y "5px"
                                :width "300px"
                                :height "0px"
-                               :anchor "top center")
+                               :anchor "bottom")
            :stacking "fg"
            :exclusive true
        (box :class "dayContainer"
@@ -70,8 +77,8 @@
 
 (defwindow salat 
            :monitor 0
-           :geometry (geometry :x "0%"
-                               :y "-23px"
+           :geometry (geometry :x "8px"
+                               :y "0px"
                                :width "150px"
                                :height "100"
                                :anchor "top right")
@@ -82,25 +89,30 @@
 		   :space-evenly false
 		 (box 
 		     (box :orientation "h"
+		            :class {nextSalat == "fajr" ? "nextSalat" : "salat"}
 		       (box :halign "start" "Fajr")
-		       (box :halign "end" {jq(salawat , '.Fajr')})
+		       (box :halign "end" fajr)
 		     )
 			 )
 		     (box :orientation "h"
+		            :class {nextSalat == "duhr" ? "nextSalat" : "salat"}
 		       (box :halign "start" "Dhuhr")
-		       (box :halign "end" {jq(salawat , '.Dhuhr')})
+		       (box :halign "end" duhr)
 		     )
 		     (box :orientation "h"
+		            :class {nextSalat == "asr" ? "nextSalat" : "salat"}
 		       (box :halign "start" "Asr")
-		       (box :halign "end" {jq(salawat , '.Asr')})
+		       (box :halign "end" asr)
 		     )
 		     (box :orientation "h"
+		            :class {nextSalat == "maghrib" ? "nextSalat" : "salat"}
 		       (box :halign "start" "Maghrib")
-		       (box :halign "end" {jq(salawat , '.Maghrib')})
+		       (box :halign "end" maghrib)
 		     )
 		     (box :orientation "h"
+		            :class {nextSalat == "isha" ? "nextSalat" : "salat"}
 		       (box :halign "start" "Isha")
-		       (box :halign "end" {jq(salawat , '.Isha')})
+		       (box :halign "end" isha)
 		     )
 		 )
 
@@ -113,6 +125,16 @@
   "date '+%d-%m-%Y'")
 
 
-(defpoll salawat :interval "1s" 
-  `curl  'http://api.aladhan.com/v1/timings/{date}?latitude=36.6373&longitude=4.2041' | jq -r '.data.timings'`)
+(defpoll fajr :interval "1s" 
+  `bash scripts/salat fajr`)
+(defpoll asr :interval "1s" 
+  `./scripts/salat asr`)
+(defpoll maghrib :interval "1s" 
+  `./scripts/salat maghrib`)
+(defpoll duhr :interval "1s" 
+  `./scripts/salat duhr`)
+(defpoll isha :interval "1s" 
+  `./scripts/salat isha`)
+(defpoll nextSalat :interval "1s"
+  `./scripts/salat next`)
 
