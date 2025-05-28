@@ -1,6 +1,6 @@
 # Screenshot
 
-![Screenshot](rice.png)
+![Screenshot](ricing.png)
 
 ## River Keybindings
 
