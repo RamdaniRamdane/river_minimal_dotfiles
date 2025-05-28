@@ -35,10 +35,12 @@ asr_time=$(date -d "$today_time $asr" +%s)
 maghrib_time=$(date -d "$today_time $maghrib" +%s)
 isha_time=$(date -d "$today_time $isha" +%s)
 
+[ $current_epoch -ge $isha_time ] && fajr_time=$((fajr_time + 86400))
+
 if [ $1 == "next" ]; then
-    [ $fajr_time -gt $current_epoch ] && echo fajr && exit
-    [ $duhr_time -gt $current_epoch ] && echo duhr && exit
-    [ $asr_time -gt $current_epoch ] && echo asr && exit
-    [ $maghrib_time -gt $current_epoch ] && echo maghrib && exit
-    [ $isha_time -gt $((current_epoch)) ] && echo isha && exit
+    [ $current_epoch -lt $fajr_time ] && echo fajr && date -u -d @$((fajr_time - current_epoch)) +%T >~/.config/eww/scripts/tmp/tiktak && exit
+    [ $current_epoch -lt $duhr_time ] && echo duhr && date -u -d @$((duhr_time - current_epoch)) +%T >~/.config/eww/scripts/tmp/tiktak && exit
+    [ $current_epoch -lt $asr_time ] && echo asr && date -u -d @$((asr_time - current_epoch)) +%T >~/.config/eww/scripts/tmp/tiktak && exit
+    [ $current_epoch -lt $maghrib_time ] && echo maghrib && date -u -d @$((maghrib_time - current_epoch)) +%T >~/.config/eww/scripts/tmp/tiktak && exit
+    [ $current_epoch -lt $isha_time ] && echo isha && date -u -d @$((isha_time - current_epoch)) +%T >~/.config/eww/scripts/tmp/tiktak && exit
 fi

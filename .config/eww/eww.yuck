@@ -91,28 +91,38 @@
 		     (box :orientation "h"
 		            :class {nextSalat == "fajr" ? "nextSalat" : "salat"}
 		       (box :halign "start" "Fajr")
-		       (box :halign "end" fajr)
+		       (box :class "red" 
+		          {nextSalat == "fajr" ? "-${timeTo}" : ""})
+		       (box  :halign "end" fajr)
 		     )
 			 )
 		     (box :orientation "h"
 		            :class {nextSalat == "duhr" ? "nextSalat" : "salat"}
-		       (box :halign "start" "Dhuhr")
-		       (box :halign "end" duhr)
+		       (box  :halign "start" "Dhuhr")
+		       (box :class "red" 
+			  {nextSalat == "duhr" ? "-${timeTo}" : ""})
+		       (box :halign "end"   duhr)
 		     )
 		     (box :orientation "h"
 		            :class {nextSalat == "asr" ? "nextSalat" : "salat"}
-		       (box :halign "start" "Asr")
-		       (box :halign "end" asr)
+		       (box :halign "start"  "Asr")
+		       (box :class "red" 
+		          {nextSalat == "asr" ? "-${timeTo}" : ""})
+		       (box :halign "end"   asr)
 		     )
 		     (box :orientation "h"
 		            :class {nextSalat == "maghrib" ? "nextSalat" : "salat"}
-		       (box :halign "start" "Maghrib")
-		       (box :halign "end" maghrib)
+		       (box :halign "start"  "Maghrib")
+		       (box :class "red"
+		          {nextSalat == "maghrib" ? "-${timeTo}" : ""})
+		       (box :halign "end"   maghrib)
 		     )
 		     (box :orientation "h"
 		            :class {nextSalat == "isha" ? "nextSalat" : "salat"}
-		       (box :halign "start" "Isha")
-		       (box :halign "end" isha)
+		       (box :halign "start"  "Isha")
+		       (box :class "red" 
+		          {nextSalat == "isha" ? "-${timeTo}" : ""})
+		       (box :halign "end"   isha)
 		     )
 		 )
 
@@ -137,4 +147,6 @@
   `./scripts/salat isha`)
 (defpoll nextSalat :interval "1s"
   `./scripts/salat next`)
+(deflisten timeTo :initial 0 
+'tail -F ~/.config/eww/scripts/tmp/tiktak')
 
