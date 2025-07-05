@@ -9,6 +9,8 @@
 				   (label :class {EWW_BATTERY.BAT0.status == "Charging" ? "green" : EWW_BATTERY.BAT0.capacity < 20 ? "red" : "bat"}   
 				          :text "󰝤" 
 						  :tooltip {EWW_BATTERY.BAT0.capacity}"%")
+
+		                    (box :class "vol" "[ VOL:" vol "]")
 				)			
                 (box :class "wrk"
 				     :orientation "h"
@@ -24,6 +26,7 @@
 					 :halign "end"
 				    (box :class "time" time)
 				    (box :class "date" date)
+				    (box :class "weather" weather)
 				   (label :class {wifiRSSI > 80 ? "green" : wifiRSSI > 50 ? "orange" : wifiRSSI > 25 ? "yellow" : wifiRSSI > 0 ? "red" : "wifi" }
 				          :text "󰝤" 
 						  :tooltip wifiname)
@@ -38,6 +41,11 @@
 
 (deflisten wrk :initial 1 
 'tail -F ~/.config/river/tmp/tag')
+(deflisten vol :initial 0
+'tail -F ~/.config/river/tmp/volume.txt')
+
+(deflisten weather :initial 1 
+'bash  ~/.config/eww/scripts/weather')
 
 (defpoll wifiRSSI :interval "1s"
 `nmcli -f IN-USE,SIGNAL  device wifi | grep "*" | awk '{print $2}'`  )
@@ -130,6 +138,9 @@
 
 (defpoll time :interval "1s" 
   "date '+%H:%M'")
+(defpoll cal :interval "1s" 
+  "cal")
+
 
 (defpoll date :interval "1s" 
   "date '+%d-%m-%Y'")
