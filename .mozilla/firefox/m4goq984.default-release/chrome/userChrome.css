@@ -21,6 +21,17 @@
   margin-right: 12px !important;
 }
 
+
+slot{
+    height:20px
+}
+.customization-target{
+    height:24px
+
+}
+.tabbrowser-tab{
+    max-width:100px 
+}
 /* Page back and foward buttons */
 #back-button,
 #forward-button
@@ -30,7 +41,7 @@
 
 /* Extensions button */
 #unified-extensions-button {
-  display: none !important
+
 }
 
 /* Extension name inside URL bar */
@@ -43,6 +54,9 @@
   display: none !important
 }
 
+#TabsToolbar {
+    height:20px
+}
 /* URL bar icons */
 #identity-permission-box,
 #star-button-box,
@@ -67,13 +81,13 @@
 
 /* --- ~END~ element visibility section --- */
 
-/* Navbar size calc */
+/* Navbar size calc - MODIFIED FOR THINNER BAR */
 :root{
 --tab-border-radius: 10px !important; /*  Tab border radius -- Changes the tabs rounding  *//*  Default: 6px  */
 --NavbarWidth: 36; /*  Default values: 36 - 43  */
---TabsHeight: 30; /*  Minimum: 30  *//*  Default: 36  */
---TabsBorder: 8; /*  Doesnt do anything on small layout  *//*  Default: 8  */
---NavbarHeightSmall: calc(var(--TabsHeight) + var(--TabsBorder))  /*  Only on small layout  *//*  Default: calc(var(--TabsHeight) + var(--TabsBorder))  *//*  Default as a number: 44  */}
+--TabsHeight: 20; /*  Modified from 30 to 20 for thinner bar  */
+--TabsBorder: 4; /*  Modified from 8 to 4 to reduce additional space  */
+--NavbarHeightSmall: calc(var(--TabsHeight) + var(--TabsBorder))  /*  Now calculated to 24px  */}
 
 @media screen and (min-width:1325px)    /*  Only the tabs space will grow from here  */
 {:root #nav-bar{margin-top: calc(var(--TabsHeight) * -1px - var(--TabsBorder) * 1px)!important; height: calc(var(--TabsHeight) * 1px + var(--TabsBorder) * 1px)} #TabsToolbar{margin-left: calc(1325px / 100 * var(--NavbarWidth)) !important} #nav-bar{margin-right: calc(100vw - calc(1325px / 100 * var(--NavbarWidth))) !important; vertical-align: center !important} #urlbar-container{min-width: 0px !important;  flex: auto !important} toolbarspring{display: none !important}}
@@ -101,7 +115,7 @@
 /*  Removes annoying border  */
 #navigator-toolbox {
   border: none !important;
-  font-size : 10px !important ;
+  font-size: 9px !important; /* Reduced from 10px to 9px for smaller UI elements */
 }
 
 /* Fades window while not in focus */
@@ -146,4 +160,105 @@
   background: none !important;
   cursor: pointer;
   display: -moz-box !important;
+}
+
+/* Added 1px border around Firefox window */
+#main-window {
+  border: 1px solid rgba(128, 128, 128, 0.5) !important;
+  box-sizing: border-box !important;
+}
+
+/* Make tabs and buttons smaller to match thinner bar */
+.tab-content {
+  padding: 0 5px !important;
+}
+
+#urlbar {
+  min-height: 20px !important;
+}
+
+#urlbar-input {
+  font-size: 11px !important;
+}
+
+.toolbarbutton-1 {
+  padding: 0 3px !important;
+  margin: 0 1px !important;
+}
+
+/* Reduce padding in tabs */
+.tabbrowser-tab {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* 🧩 Correction des menus contextuels/popups – Taille du container uniquement */
+
+menupopup,
+popup {
+  padding: 6px 0 !important;         /* espace intérieur vertical */
+  border-radius: 6px !important;
+  background-color: #1e1e1e !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid #444 !important;
+}
+
+menu,
+menuitem {
+  min-height: 32px !important;       /* hauteur correcte de chaque ligne */
+  padding: 6px 12px !important;      /* espace autour du texte */
+  line-height: 32px !important;      /* aligne le texte verticalement */
+  font-size: 11px !important;        /* 🧊 petite police, comme tu veux */
+}
+
+menuseparator {
+  margin: 6px 0 !important;
+  height: 1px !important;
+  background-color: #555 !important;
+}
+
+
+/* Fix for menu/popup appearance */
+menupopup,
+popup {
+  padding: 6px 0 !important;
+  border-radius: 6px !important;
+  background-color: #1e1e1e !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid #444 !important;
+  max-width: none !important; /* Remove any max-width constraints */
+  min-width: 200px !important; /* Ensure menus have reasonable minimum width */
+  min-height: 200px !important;
+  max-height: none !important;
+}
+
+/* Fix menu items to ensure text is visible */
+menu,
+menuitem {
+  min-height: 24px !important; /* Reduced from 32px for better compatibility */
+  padding: 4px 12px !important; /* Reduced vertical padding */
+  line-height: 24px !important; /* Adjusted to match min-height */
+  font-size: 12px !important; /* Slightly increased font size for readability */
+  max-width: none !important; /* Remove max-width constraints */
+  width: auto !important; /* Let items expand to content */
+}
+
+/* Fix menu item labels to ensure visibility */
+.menu-text,
+.menu-iconic-text {
+  display: block !important; /* Force display */
+  white-space: nowrap !important; /* Prevent text wrapping */
+  overflow: visible !important; /* Allow text to be visible */
+}
+
+/* Fix hamburger menu specifically */
+#appMenu-popup {
+  min-width: 300px !important; /* Wider to accommodate menu items */
+}
+
+/* Ensure menu items inside hamburger menu are properly sized */
+#appMenu-popup .toolbarbutton-text,
+#appMenu-popup .subviewbutton-text {
+  display: block !important;
+  visibility: visible !important;
 }
